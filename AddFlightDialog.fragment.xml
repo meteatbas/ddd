@@ -1,0 +1,102 @@
+<Dialog id="dialog"
+  xmlns="sap.m"
+  xmlns:form="sap.ui.layout.form"
+  xmlns:core="sap.ui.core"
+  core:require="{
+    'ODataStringType': 'sap/ui/model/odata/type/String',
+    'ODataDateTimeType': 'sap/ui/model/odata/type/DateTime',
+    'ODataTimeType': 'sap/ui/model/odata/type/Time',
+    'CurrencyType': 'sap/ui/model/type/Currency'
+  }"
+  title="New Flight"
+  draggable="true"
+  stretch="{= !!${device>/system/phone}}"
+  beforeOpen=".onBeforeDialogOpen"
+  afterClose=".onAfterDialogClose"
+>
+  <form:SimpleForm id="form"
+    editable="true"
+    validateFieldGroup=".onValidateFieldGroup"
+    fieldGroupIds="inputs"
+  >
+    <Label text="Flight Number"/>
+    <Input
+      fieldGroupIds="inputs"
+      required="true"
+      value="{
+        path: 'odata>connid',
+        type: 'ODataStringType',
+        constraints: {
+          isDigitSequence: true,
+          maxLength: 4,
+          nullable: false
+        }
+      }"
+    ></Input>
+    <Label text="Flight Date"></Label>
+    <DatePicker
+      fieldGroupIds="inputs"
+      required="true"
+      value="{
+        path: 'odata>fldate',
+        type: 'ODataDateTimeType',
+        constraints: {
+          isDateOnly: true,
+          displayFormat: 'Date',
+          nullable: false
+        }
+      }"
+    ></DatePicker>
+    <Label text="Departure Time"></Label>
+    <TimePicker
+      fieldGroupIds="inputs"
+      required="true"
+      value="{
+        path: 'odata>flightDetails/departureTime',
+        type: 'ODataTimeType',
+        formatOptions: {
+          strictParsing: true
+        },
+        constraints: {
+          nullable: false
+        }
+      }"
+    /> <!-- Added time won't be displayed in the table since MockServer currently does not support updating complex types! See https://github.com/SAP/openui5/issues/471#issuecomment-282988369
+    -->
+    <Label text="Ticket Price"></Label>
+    <Input
+      fieldGroupIds="inputs"
+      required="true"
+      value="{
+        parts: [
+          'odata>PRICE',
+          'odata>CURRENCY'
+        ],
+        type: 'CurrencyType',
+        formatOptions: {
+          showMeasure: true,
+          currencyCode: true,
+          currencyContext: 'accounting',
+          emptyString: 0
+        },
+        constraints: {
+          minimum: 1
+        }
+      }"
+      placeholder="E.g.: 2222 &#8364;"
+    />
+  </form:SimpleForm>
+  <beginButton>
+    <Button id="addButton"
+      text="Add"
+      type="Emphasized"
+      press=".onDialogAddPress"
+    />
+  </beginButton>
+  <endButton>
+    <Button id="cancelButton"
+      text="Cancel"
+      press=".onDialogCancelPress"
+    />
+  </endButton>
+</Dialog>

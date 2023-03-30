@@ -5,6 +5,7 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:c="sap.ui.core"
 	xmlns:m="sap.m"
+	xmlns:la="sap.ui.layout"
 	height="100%">
 	<m:Page
 		showHeader="false"
@@ -13,6 +14,7 @@
 		<m:content>
 
 			<m:SearchField width="100%" placeholder="firstName"  liveChange="handleLiveSearch"/>
+			<m:Button icon="sap-icon://add" type="Emphasized" press="onbuttonpress"/>
 			<m:HBox renderType="Bare">
 				<Table
 					id="table1"
